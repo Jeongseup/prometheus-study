@@ -1,0 +1,11 @@
+groups:
+  - name: test_metrics
+    rules:  
+      - alert: TestUpAndDown
+        expr: up == 0
+        for: 0s
+        labels:
+          severity: critical
+        annotations:
+          summary: "cosmostation-exporter service up and down tets"
+          description: "코스모스테이션 익스포터 30초이상 응답이 없습니다. VALUE = {{ $value }}"

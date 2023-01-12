@@ -1,0 +1,28 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+# Alerting specifies settings related to the Alertmanager.
+alerting:
+  #alert_relabel_configs:
+    # [ - <relabel_config> ... ]
+  alertmanagers:
+    - scheme: http
+      static_configs:
+      - targets: ['alertmanager:9093']
+
+# Rule files specifies a list of globs. Rules and alerts are read from
+# all matching files.
+rule_files:
+  - './test_rules.yml'
+
+# A list of scrape configurations.
+scrape_configs:
+  # [ - <scrape_config> ... ]
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: cosmostation-exporter
+    static_configs:
+      - targets: ['host.docker.internal:9200']

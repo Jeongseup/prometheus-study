@@ -1,0 +1,29 @@
+# alertmanager config
+global:
+  # ResolveTimeout is the time after which an alert is declared resolved
+  resolve_timeout: 0s
+  # auth for Slack
+  slack_api_url: "..."
+
+route:
+  group_by: ['alertname']
+  repeat_interval: 1m
+
+  # default receiver
+  receiver: "test_slack_receiver"
+
+receivers:
+  - name: "test_slack_receiver"
+    slack_configs:
+      - channel: "#monitoring-test"
+        send_resolved: true
+        title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Critical'
+        text: >-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+            *Description:* {{ .Annotations.description }}
+            *Link:* {{ .GeneratorURL }}
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
