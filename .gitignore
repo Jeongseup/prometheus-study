@@ -1,2 +1,4 @@
 # data
 data/*
+# rules
+services/prometheus/alert_rule/*
